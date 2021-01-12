@@ -1,0 +1,585 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="TalkZhang">
+  <meta name="keywords" content="">
+  <title>lambda常用语法 - TalkZhang</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"uacoding.cn","root":"/","version":"1.8.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":true,"baidu":"https://hm.baidu.com/hm.js?84185614db8dd775d7e0f0633cec31c0","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"2Spf4SGTx3bcbcoSsUhUm8i7-gzGzoHsz","app_key":"OM4RCMUGh8CvtgbXDrNgpHtv","server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>TalkZhang</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/header_img/home-bg-2-dark.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="lambda常用语法">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-03-01 16:03" pubdate>
+        2020年3月1日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.7k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      25
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">lambda常用语法</h1>
+            
+            <div class="markdown-body">
+              <blockquote>
+<p>使用javaProgrammers和phpProgrammers两个泛型为Person的List集合来做示例</p>
+</blockquote>
+<a id="more"></a>
+
+<p>关于lambda表达式的认识，可看<a href="https://uacoding.cn/2019/05/05/lambda-info/" title="My Blog">java中的lambda表达式浅析</a>，本篇讲的是stream的日常使用，当然也会结合lambda来编写一些，由于是小白，所以本篇只能不断更新，用到哪更到哪吧，当笔记用用还蛮不错。</p>
+<p><strong>目录</strong></p>
+<ul>
+<li>[TOC]</li>
+</ul>
+<h2 id="使用Lambdas和Streams"><a href="#使用Lambdas和Streams" class="headerlink" title="使用Lambdas和Streams"></a>使用Lambdas和Streams</h2><p>Stream是对集合的包装,通常和lambda一起使用。 使用lambdas可以支持许多操作,如 map, filter, limit, sorted, count, min, max, sum, collect 等等。 同样,Stream使用懒运算,他们并不会真正地读取所有数据,遇到像getFirst() 这样的方法就会结束链式语法。:heart_eyes:</p>
+<h3 id="forEach方法"><a href="#forEach方法" class="headerlink" title="forEach方法"></a>forEach方法</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(<span class="string">"所有程序员的姓名:"</span>);  </span><br><span class="line">javaProgrammers.forEach((p) -&gt; System.out.printf(<span class="string">"%s %s; "</span>, p.getFirstName(), p.getLastName()));  </span><br><span class="line">phpProgrammers.forEach((p) -&gt; System.out.printf(<span class="string">"%s %s; "</span>, p.getFirstName(), p.getLastName()));</span><br></pre></td></tr></table></figure>
+
+<p>同样使用forEach方法,增加程序员的工资5%:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(<span class="string">"给程序员加薪 5% :"</span>);  </span><br><span class="line">Consumer&lt;Person&gt; giveRaise = e -&gt; e.setSalary(e.getSalary() / <span class="number">100</span> * <span class="number">5</span> + e.getSalary());  </span><br><span class="line">  </span><br><span class="line">javaProgrammers.forEach(giveRaise);  </span><br><span class="line">phpProgrammers.forEach(giveRaise);</span><br></pre></td></tr></table></figure>
+
+<h3 id="filter方法过滤需要的条件"><a href="#filter方法过滤需要的条件" class="headerlink" title="filter方法过滤需要的条件"></a>filter方法过滤需要的条件</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(<span class="string">"下面是月薪超过 $1,400 的PHP程序员:"</span>)  </span><br><span class="line">phpProgrammers.stream()  </span><br><span class="line">          .filter((p) -&gt; (p.getSalary() &gt; <span class="number">1400</span>))  </span><br><span class="line">          .forEach((p) -&gt; System.out.printf(<span class="string">"%s %s; "</span>, p.getFirstName(), p.getLastName()));</span><br></pre></td></tr></table></figure>
+
+<p>也可以定义过滤器,然后重用它们来执行其他操作:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义 filters  </span></span><br><span class="line">Predicate&lt;Person&gt; ageFilter = (p) -&gt; (p.getAge() &gt; <span class="number">25</span>);  </span><br><span class="line">Predicate&lt;Person&gt; salaryFilter = (p) -&gt; (p.getSalary() &gt; <span class="number">1400</span>);  </span><br><span class="line">Predicate&lt;Person&gt; genderFilter = (p) -&gt; (<span class="string">"female"</span>.equals(p.getGender()));  </span><br><span class="line">  </span><br><span class="line">System.out.println(<span class="string">"下面是年龄大于 24岁且月薪在$1,400以上的女PHP程序员:"</span>);  </span><br><span class="line">phpProgrammers.stream()  </span><br><span class="line">          .filter(ageFilter)  </span><br><span class="line">          .filter(salaryFilter)  </span><br><span class="line">          .filter(genderFilter)  </span><br><span class="line">          .forEach((p) -&gt; System.out.printf(<span class="string">"%s %s; "</span>, p.getFirstName(), p.getLastName()));  </span><br><span class="line">  </span><br><span class="line"><span class="comment">// 重用filters  </span></span><br><span class="line">System.out.println(<span class="string">"年龄大于 24岁的女性 Java programmers:"</span>);  </span><br><span class="line">javaProgrammers.stream()  </span><br><span class="line">          .filter(ageFilter)  </span><br><span class="line">          .filter(genderFilter)  </span><br><span class="line">          .forEach((p) -&gt; System.out.printf(<span class="string">"%s %s; "</span>, p.getFirstName(), p.getLastName()));</span><br></pre></td></tr></table></figure>
+
+<h3 id="limit方法"><a href="#limit方法" class="headerlink" title="limit方法"></a>limit方法</h3><p>可以限制结果集的个数</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(<span class="string">"最前面的3个 Java programmers:"</span>);  </span><br><span class="line">javaProgrammers.stream()  </span><br><span class="line">          .limit(<span class="number">3</span>)  </span><br><span class="line">          .forEach((p) -&gt; System.out.printf(<span class="string">"%s %s; "</span>, p.getFirstName(), p.getLastName()));  </span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">System.out.println(<span class="string">"最前面的3个女性 Java programmers:"</span>);  </span><br><span class="line">javaProgrammers.stream()  </span><br><span class="line">          .filter(genderFilter)  </span><br><span class="line">          .limit(<span class="number">3</span>)  </span><br><span class="line">          .forEach((p) -&gt; System.out.printf(<span class="string">"%s %s; "</span>, p.getFirstName(), p.getLastName()));</span><br></pre></td></tr></table></figure>
+
+<h3 id="skip方法"><a href="#skip方法" class="headerlink" title="skip方法"></a>skip方法</h3><p>通常可以结合limit方法来说明跳过第几个来进行查询，需要注意的是skip方法需要放在limit方法前面执行</p>
+<h3 id="sorted方法排序"><a href="#sorted方法排序" class="headerlink" title="sorted方法排序"></a>sorted方法排序</h3><p>在下面的例子中,将根据名字和薪水排序Java程序员,放到一个list中,然后显示列表:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(<span class="string">"根据 name 排序,并显示前5个 Java programmers:"</span>);  </span><br><span class="line">List&lt;Person&gt; sortedJavaProgrammers = javaProgrammers  </span><br><span class="line">          .stream()  </span><br><span class="line">          .sorted((p, p2) -&gt; (p.getFirstName().compareTo(p2.getFirstName())))  </span><br><span class="line">          .limit(<span class="number">5</span>)  </span><br><span class="line">          .collect(toList());  </span><br><span class="line">  </span><br><span class="line">sortedJavaProgrammers.forEach((p) -&gt; System.out.printf(<span class="string">"%s %s; %n"</span>, p.getFirstName(), p.getLastName()));  </span><br><span class="line">   </span><br><span class="line">System.out.println(<span class="string">"根据 salary 排序 Java programmers:"</span>);  </span><br><span class="line">sortedJavaProgrammers = javaProgrammers  </span><br><span class="line">          .stream()  </span><br><span class="line">          .sorted( (p, p2) -&gt; (p.getSalary() - p2.getSalary()) )  </span><br><span class="line">          .collect( toList() );  </span><br><span class="line">  </span><br><span class="line">sortedJavaProgrammers.forEach((p) -&gt; System.out.printf(<span class="string">"%s %s; %n"</span>, p.getFirstName(), p.getLastName()));</span><br></pre></td></tr></table></figure>
+
+<h3 id="min和max方法"><a href="#min和max方法" class="headerlink" title="min和max方法"></a>min和max方法</h3><p>比如如果只对最低和最高的薪水感兴趣,比排序后选择第一个/最后一个 更快的是min和max方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(<span class="string">"工资最低的 Java programmer:"</span>);  </span><br><span class="line">Person pers = javaProgrammers  </span><br><span class="line">          .stream()  </span><br><span class="line">          .min((p1, p2) -&gt; (p1.getSalary() - p2.getSalary()))  </span><br><span class="line">          .get()  </span><br><span class="line">  </span><br><span class="line">System.out.printf(<span class="string">"Name: %s %s; Salary: $%,d."</span>, pers.getFirstName(), pers.getLastName(), pers.getSalary())  </span><br><span class="line">  </span><br><span class="line">System.out.println(<span class="string">"工资最高的 Java programmer:"</span>);  </span><br><span class="line">Person person = javaProgrammers  </span><br><span class="line">          .stream()  </span><br><span class="line">          .max((p, p2) -&gt; (p.getSalary() - p2.getSalary()))  </span><br><span class="line">          .get()  </span><br><span class="line">  </span><br><span class="line">System.out.printf(<span class="string">"Name: %s %s; Salary: $%,d."</span>, person.getFirstName(), person.getLastName(), person.getSalary())</span><br></pre></td></tr></table></figure>
+
+<h3 id="collect方法合map方法结合"><a href="#collect方法合map方法结合" class="headerlink" title="collect方法合map方法结合"></a>collect方法合map方法结合</h3><p>上面的例子中我们已经看到 collect 方法是如何工作的。 结合 map 方法,我们可以使用 collect 方法来将我们的结果集放到一个字符串,一个 Set 或一个TreeSet中:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(<span class="string">"将 PHP programmers 的 first name 拼接成字符串:"</span>);  </span><br><span class="line">String phpDevelopers = phpProgrammers  </span><br><span class="line">          .stream()  </span><br><span class="line">          .map(Person::getFirstName)  </span><br><span class="line">          .collect(joining(<span class="string">" ; "</span>)); <span class="comment">// 在进一步的操作中可以作为标记(token)     </span></span><br><span class="line">  </span><br><span class="line">System.out.println(<span class="string">"将 Java programmers 的 first name 存放到 Set:"</span>);  </span><br><span class="line">Set&lt;String&gt; javaDevFirstName = javaProgrammers  </span><br><span class="line">          .stream()  </span><br><span class="line">          .map(Person::getFirstName)  </span><br><span class="line">          .collect(toSet());  </span><br><span class="line">  </span><br><span class="line">System.out.println(<span class="string">"将 Java programmers 的 first name 存放到 TreeSet:"</span>);  </span><br><span class="line">TreeSet&lt;String&gt; javaDevLastName = javaProgrammers  </span><br><span class="line">          .stream()  </span><br><span class="line">          .map(Person::getLastName)  </span><br><span class="line">          .collect(toCollection(TreeSet::<span class="keyword">new</span>));</span><br></pre></td></tr></table></figure>
+
+<h3 id="Streams可以是并行的-parallel"><a href="#Streams可以是并行的-parallel" class="headerlink" title="Streams可以是并行的(parallel)"></a>Streams可以是并行的(parallel)</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(<span class="string">"计算付给 Java programmers 的所有money:"</span>);  </span><br><span class="line"><span class="keyword">int</span> totalSalary = javaProgrammers  </span><br><span class="line">          .parallelStream()  </span><br><span class="line">          .mapToInt(p -&gt; p.getSalary())  </span><br><span class="line">          .sum();</span><br></pre></td></tr></table></figure>
+
+<h3 id="summaryStatistics方法来进行聚合"><a href="#summaryStatistics方法来进行聚合" class="headerlink" title="summaryStatistics方法来进行聚合"></a>summaryStatistics方法来进行聚合</h3><p>可以使用summaryStatistics方法获得stream 中元素的各种汇总数据。 接下来,我们可以访问这些方法,比如getMax, getMin, getSum或getAverage:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; numbers = Arrays.asList(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">10</span>);  </span><br><span class="line">IntSummaryStatistics stats = numbers  </span><br><span class="line">          .stream()  </span><br><span class="line">          .mapToInt((x) -&gt; x)  </span><br><span class="line">          .summaryStatistics();  </span><br><span class="line">  </span><br><span class="line">System.out.println(<span class="string">"List中最大的数字 : "</span> + stats.getMax());  </span><br><span class="line">System.out.println(<span class="string">"List中最小的数字 : "</span> + stats.getMin());  </span><br><span class="line">System.out.println(<span class="string">"所有数字的总和   : "</span> + stats.getSum());  </span><br><span class="line">System.out.println(<span class="string">"所有数字的平均值 : "</span> + stats.getAverage());</span><br></pre></td></tr></table></figure>
+
+<h3 id="去除重复"><a href="#去除重复" class="headerlink" title="去除重复"></a>去除重复</h3><h4 id="去除List中重复的String"><a href="#去除List中重复的String" class="headerlink" title="去除List中重复的String"></a>去除List中重复的String</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">List unique = list.stream().distinct().collect(Collectors.toList());</span><br></pre></td></tr></table></figure>
+
+<h4 id="去除List中重复的对象"><a href="#去除List中重复的对象" class="headerlink" title="去除List中重复的对象"></a>去除List中重复的对象</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 根据name去重</span></span><br><span class="line">List&lt;Person&gt; unique = persons.stream().collect(</span><br><span class="line">            Collectors.collectingAndThen(</span><br><span class="line">                    Collectors.toCollection(() -&gt; <span class="keyword">new</span> TreeSet&lt;&gt;(Comparator.comparing(Person::getName))), ArrayList::<span class="keyword">new</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 根据name,sex两个属性去重</span></span><br><span class="line">List&lt;Person&gt; unique = persons.stream().collect(</span><br><span class="line">           Collectors. collectingAndThen(</span><br><span class="line">                    Collectors.toCollection(() -&gt; <span class="keyword">new</span> TreeSet&lt;&gt;(Comparator.comparing(o -&gt; o.getName() + <span class="string">";"</span> + o.getSex()))), ArrayList::<span class="keyword">new</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h4 id="List转Map"><a href="#List转Map" class="headerlink" title="List转Map"></a>List转Map</h4><p>从一个Person对象的List集合，取出id和name组成一个map集合</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, String&gt; collect = list.stream().collect(Collectors.toMap(p -&gt; p.getId(), p -&gt; p.getName()));</span><br></pre></td></tr></table></figure>
+
+<h3 id="分组后聚合"><a href="#分组后聚合" class="headerlink" title="分组后聚合"></a>分组后聚合</h3><p>谈谈今天工作中遇到的，先说说需求哈，按账户类型分组后，再按收支类型分组，并统计金额和笔数，不明白，怕想不起来是啥是吗，放张图：</p>
+<p><img src="https://uacoding.cn/images/posts/java/lombok.png" srcset="/img/loading.gif" alt="" title="lambda_flag"></p>
+<p>看看代码实现吧：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">List&lt;BeanMap&lt;String, Object&gt;&gt; list = accountChgService.queryUserBills(obj);</span><br><span class="line"><span class="comment">// 获取账户分类信息 -&gt; 示例：余额账户:总支出xx笔，xx元；总收入xx笔，xx元...</span></span><br><span class="line">List&lt;BeanMap&gt; cofferInfos = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"><span class="comment">// 按账户类型分组</span></span><br><span class="line">Map&lt;Integer, List&lt;BeanMap&lt;String, Object&gt;&gt;&gt; collect = list.stream().collect(Collectors.groupingBy(beanmap -&gt; beanmap.getIntegerValue(<span class="string">"acctType"</span>)));</span><br><span class="line">collect.keySet().forEach(acctType -&gt; &#123;</span><br><span class="line">	<span class="comment">// 按收入类型分组</span></span><br><span class="line">	Map&lt;Integer, List&lt;BeanMap&lt;String, Object&gt;&gt;&gt; agTypeCol = collect.get(acctType).stream().collect(Collectors.groupingBy(beanmap -&gt; beanmap.getIntegerValue(<span class="string">"agType"</span>)));</span><br><span class="line">	agTypeCol.keySet().forEach(agtype -&gt; &#123;</span><br><span class="line">		Long count = agTypeCol.get(agtype).stream().count();</span><br><span class="line">		Integer inFee = agTypeCol.get(agtype)</span><br><span class="line">				.stream()</span><br><span class="line">				.mapToInt(beanmap -&gt; beanmap.getIntegerValue(<span class="string">"inFee"</span>))</span><br><span class="line">				.sum();</span><br><span class="line">		Integer outFee = agTypeCol.get(agtype)</span><br><span class="line">				.stream()</span><br><span class="line">				.mapToInt(beanmap -&gt; beanmap.getIntegerValue(<span class="string">"outFee"</span>))</span><br><span class="line">				.sum();</span><br><span class="line">		BeanMap&lt;String, Object&gt; map = <span class="keyword">new</span> BeanMap&lt;&gt;();</span><br><span class="line">		map.put(<span class="string">"acctType"</span>,acctType);</span><br><span class="line">		map.put(<span class="string">"agType"</span>,agtype);</span><br><span class="line">		map.put(<span class="string">"count"</span>, count);</span><br><span class="line">		map.put(<span class="string">"sumInfee"</span>,inFee);</span><br><span class="line">		map.put(<span class="string">"sumOutFee"</span>,outFee);</span><br><span class="line">		cofferInfos.add(map);</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>PS：BeanMap是我自定义的一个继承了HashMap的类，list查询出来的数据是列表要展示的，包括了收入金额（inFee），支出金额（outFee），说白了，就是不想写这么简单又啰嗦的SQL语句了，所以代码来解决一下，这种写法不见得是最优秀的，后续如果理解或者发现了更好的方式，放上来…</p>
+<h2 id="待解决问题"><a href="#待解决问题" class="headerlink" title="待解决问题"></a>待解决问题</h2><p>在stream内如何使外部变量进行运算，例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> index = <span class="number">0</span>;</span><br><span class="line">        List&lt;Integer&gt; itgs = Arrays.asList(<span class="number">1</span>, <span class="number">3</span>, <span class="number">56</span>, <span class="number">78</span>, <span class="number">9</span>);</span><br><span class="line">        itgs.forEach(v -&gt; &#123;</span><br><span class="line">            <span class="keyword">if</span> (v == <span class="number">3</span>) &#123;</span><br><span class="line">                index++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>上面会报错，要求index必须是final修饰，这种情况暂时找不到太好的解决办法，网上说可以定义为全局变量来解决，但这我不认为是好的，毕竟不能因为用了stream而改变代码结构。</p>
+<p>先总结这些，待续…</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Java/">Java</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/java/">java</a>
+                    
+                      <a class="hover-with-bg" href="/tags/lambda/">lambda</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" target="_blank" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/03/01/2019-05-05-lambda-info/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">lambda表达式浅析</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/03/01/2019-04-27-face-lock/">
+                        <span class="hidden-mobile">不可不说的 Java “锁”事</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments">
+                
+                
+  <div id="vcomments"></div>
+  <script type="text/javascript">
+    Fluid.utils.waitElementVisible('vcomments', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function () {
+        new Valine({
+          el: "#vcomments",
+          app_id: "2Spf4SGTx3bcbcoSsUhUm8i7-gzGzoHsz",
+          app_key: "OM4RCMUGh8CvtgbXDrNgpHtv",
+          placeholder: "说点什么",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: false,
+          recordIP: false,
+          serverURLs: "",
+        });
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the
+    <a href="https://valine.js.org" target="_blank" rel="nofollow noopener noopener">comments powered by Valine.</a>
+  </noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      var inputArea = document.querySelector("#local-search-input");
+      inputArea.onclick = function () {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+        this.onclick = null
+      }
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?https://hm.baidu.com/hm.js?84185614db8dd775d7e0f0633cec31c0";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+
+</body>
+</html>

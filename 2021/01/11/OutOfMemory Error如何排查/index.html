@@ -1,0 +1,589 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="TalkZhang">
+  <meta name="keywords" content="">
+  <title>OutOfMemory Error如何排查 - TalkZhang</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"uacoding.cn","root":"/","version":"1.8.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":true,"baidu":"https://hm.baidu.com/hm.js?84185614db8dd775d7e0f0633cec31c0","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"2Spf4SGTx3bcbcoSsUhUm8i7-gzGzoHsz","app_key":"OM4RCMUGh8CvtgbXDrNgpHtv","server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>TalkZhang</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/header_img/home-bg-2-dark.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="OutOfMemory Error如何排查">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-01-11 17:01" pubdate>
+        2021年1月11日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.4k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      15
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">OutOfMemory Error如何排查</h1>
+            
+            <div class="markdown-body">
+              <p>最近线上项目有开始出现oom类型错误，为了方便下次排查，所以对java项目如何发生oom应该如何处理步骤流程大致梳理一下，方便日后使用。</p>
+<h1 id="如何能快速查看到异常堆栈信息"><a href="#如何能快速查看到异常堆栈信息" class="headerlink" title="如何能快速查看到异常堆栈信息"></a>如何能快速查看到异常堆栈信息</h1><p>任何java项目，在运行过程中可以通过命令来实时获取该项目的堆栈详细数据信息，同时也可以设置在发生<code>OutOfMemory</code>时自动生成dump文件来供我们本地分析问题。</p>
+<h2 id="运行时获取dump文件"><a href="#运行时获取dump文件" class="headerlink" title="运行时获取dump文件"></a>运行时获取dump文件</h2><ul>
+<li><p>首先通过命令行找到当前运行项目在服务器上的pid，也就是进程号，获取方式很多种，如果你是linux系统，可以通过<code>ps -f |grep xxx.jar</code> 来定位，或者通过<code>jps</code>来查看。</p>
+</li>
+<li><p>获取到pid之后，就可以通过<code>jmap</code>命令来进行导出堆文件的导出。示例：</p>
+</li>
+</ul>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gradle">jmap -<span class="hljs-keyword">dump</span>:<span class="hljs-keyword">file</span>=javaDump.<span class="hljs-keyword">dump</span>,format=b <span class="hljs-number">24552</span><br></code></pre></td></tr></table></figure>
+
+<p>这样会获取到一个名为javaDump.dump的文件。</p>
+<h2 id="发生oom异常时自动生成dump文件"><a href="#发生oom异常时自动生成dump文件" class="headerlink" title="发生oom异常时自动生成dump文件"></a>发生oom异常时自动生成dump文件</h2><p>这个可以通过jvm启动参数来进行获取。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs groovy">-<span class="hljs-string">XX:</span>+HeapDumpOnOutOfMemoryError -<span class="hljs-string">XX:</span>HeapDumpPath=./<br></code></pre></td></tr></table></figure>
+
+<p>如上，会在发生oom时，将dump文件输出到根目录下。</p>
+<h1 id="如何分析dump文件"><a href="#如何分析dump文件" class="headerlink" title="如何分析dump文件"></a>如何分析dump文件</h1><p>dump文件搞定了，接下来是如何分析呢？如何通过工具或者别的方式来对dump出来的文件进行一个深入解读？</p>
+<h2 id="jhat分析"><a href="#jhat分析" class="headerlink" title="jhat分析"></a>jhat分析</h2><p>jdk中有自带jhat工具来对文件进行在线分析，通过<code>jhat xxx.dump/hprof</code>，之后，本地访问<code>http://localhost:7000</code>，即可在浏览器看到访问效果，如图：</p>
+<p><img src="https://gitee.com/hongqigg/imgs-bed/raw/master/image/%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_16103487331830.png" srcset="/img/loading.gif" alt="通过jhat启动查看dump"></p>
+<p><img src="https://gitee.com/hongqigg/imgs-bed/raw/master/image/%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_16103490572886.png" srcset="/img/loading.gif" alt="jhat页面1"></p>
+<p><img src="https://gitee.com/hongqigg/imgs-bed/raw/master/image/%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_1610349010325.png" srcset="/img/loading.gif" alt="jhat页面2"></p>
+<p><img src="https://gitee.com/hongqigg/imgs-bed/raw/master/image/%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_16103492726863.png" srcset="/img/loading.gif" alt="jhat页面3"></p>
+<p>页面大致是长这个样子，重点查看 Other Queries目录下的SHow heap histogram，可以比较容易观察到对象的引用次数及占用内存的大小。</p>
+<p>使用jhat优点是非常方便，通过命令行即可查看视图，缺点是如果文件过大，容易导致浏览器卡崩，而且都是通过纯文本描述，阅览上并不够直观。</p>
+<h2 id="jvisualvm分析"><a href="#jvisualvm分析" class="headerlink" title="jvisualvm分析"></a>jvisualvm分析</h2><p>jdk的另一个工具，visualvm也可以对dump文件进行可视化分析，且功能比较强大，可以定位到具体运行的线程错误（代码行），虽然分析jvm内存是一件非常复杂工作，即使定位到代码行也不一定就是该位置导致的oom，但是和jhat相比，jvisualvm有很大优势。</p>
+<p>找到所在操作系统内的<code>$JAVA_HOME/bin/jvisualvm.exe</code>，双击即可启动，启动后左上角<code>文件-&gt;装入</code>，选择指定的要分析的文件即可。</p>
+<p><img src="https://gitee.com/hongqigg/imgs-bed/raw/master/image/%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_16103500291910.png" srcset="/img/loading.gif" alt="jvisualvm界面图"></p>
+<p>综合来看还是使用jvisualvm来进行dump文件的查询分析更直观、更利于定位问题。</p>
+<h2 id="测试案例"><a href="#测试案例" class="headerlink" title="测试案例"></a>测试案例</h2><p>本地编写一块测试代码验证一下流程，方便记忆。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Test</span> </span>&#123;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> IOException </span>&#123;<br>        List&lt;String&gt; list = <span class="hljs-keyword">new</span> ArrayList&lt;&gt;();<br>        <span class="hljs-keyword">int</span> cnt = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span> (; ;) &#123;<br>            list.add(<span class="hljs-keyword">new</span> String(<span class="hljs-string">"i am couter this is "</span> + cnt));<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>编写如上代码，且设置一下jvm启动参数：<code>-Xmx20m -Xms20m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./</code>，在IDEA内设置参数非常方便：</p>
+<p><img src="https://gitee.com/hongqigg/imgs-bed/raw/master/image/%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_16103505327086.png" srcset="/img/loading.gif" alt="IDEA设置jvm启动参数"></p>
+<p><img src="https://gitee.com/hongqigg/imgs-bed/raw/master/image/%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_16103507065766.png" srcset="/img/loading.gif" alt="IDEA设置jvm启动参数"></p>
+<p>这里需要注意，在测试时，不要设置-Xms太小，如果太小会在启动时报错：</p>
+<figure class="highlight subunit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs subunit"><span class="hljs-keyword">Error </span>occurred during initialization of VM <br>GC triggered before VM initialization comA1eted. Try increasing NewSize, current value 1536K .<br></code></pre></td></tr></table></figure>
+
+<p>设置完之后启动main方法，在发生oom之后会自动导出dump文件到当前目录下。</p>
+<p><img src="https://gitee.com/hongqigg/imgs-bed/raw/master/image/%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_1610351281678.png" srcset="/img/loading.gif" alt="oom控制台信息"></p>
+<p><img src="https://gitee.com/hongqigg/imgs-bed/raw/master/image/%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_16103514014791.png" srcset="/img/loading.gif" alt="oom文件"></p>
+<p>将这个文件通过分析工具来定位查看信息，通过[概要]项可以定位哪个该线程触发了错误信息，且户定位到代码行。</p>
+<p><img src="https://gitee.com/hongqigg/imgs-bed/raw/master/image/%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_1610351484622.png" srcset="/img/loading.gif" alt="jvva visual VM page 1"></p>
+<p>通过[类]项可以更清晰的看到对象引用记录。</p>
+<p><img src="https://gitee.com/hongqigg/imgs-bed/raw/master/image/%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_16103516355191.png" srcset="/img/loading.gif" alt="jvva visual VM page 2"></p>
+<p>可以看到引用最多的是char数组，其实就是string，因为string的底层结构就是char[]，双击char[]进去之后，可以详细看到究竟是谁在引用它。</p>
+<p><img src="https://gitee.com/hongqigg/imgs-bed/raw/master/image/%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_16103519112087.png" srcset="/img/loading.gif" alt="jvva visual VM page 3"></p>
+<p>可以看到，引用该类实例的是ArrayList持续装载，且可以定位到具体文本内容。</p>
+<h1 id="扩展补充-OutOfMemoryError的几种类型"><a href="#扩展补充-OutOfMemoryError的几种类型" class="headerlink" title="扩展补充 OutOfMemoryError的几种类型"></a>扩展补充 OutOfMemoryError的几种类型</h1><ul>
+<li><p><strong>OutOfMemoryError: GC overhead limit exceeded</strong></p>
+<p>  这是指程序基本耗尽了所有的内存 GC都清理不了，意味着GC占用了大部分CPU周期，大多数意味着98％或99％，并且在每次运行中它释放的内存非常少1-2％对别的线程影响很大影响整个系统吞吐量，比如一个线程占用98%内存无法释放，其他线程执行过程中由于内存限制就会抛出这个错误，甚至会导致连接数据库等这种操作变的缓慢，出现类似一个请求处理好几分钟的现象。</p>
+</li>
+</ul>
+<ul>
+<li><p><strong>OutOfMemoryError: Java heap space</strong></p>
+<p>  相当于将xl型号的东西往只有s号空间内塞的意思，意味着应用程序在某些处理期间内存不足。</p>
+</li>
+</ul>
+<ul>
+<li><p><strong>OutOfMemoryError: Permgen space | OutOfMemoryError: Metaspace</strong></p>
+<p>  在java8之前存在用永久代来实现方法区，这个永久代归堆管理，但是java8之后，将方法区的实现放在元空间，那么方法区内存不足时，在java8之前会出现：permgen space的oom错误，java8之后，也就是方法区通过元空间来实现，这个区域内存不足时会报：Metaspace</p>
+</li>
+</ul>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>在排查oom问题时，排查步骤如下：</p>
+<ol>
+<li><p>设置jvm启动参数，<code>-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./</code>，在发生oom时自动生成dump文件。</p>
+</li>
+<li><p>如果是生产服务器，可以将文件发送到本地，通过jvisualvm进行排查。</p>
+</li>
+</ol>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/java/">java</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/jvm/">jvm</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" target="_blank" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/04/20/leetcode-topk/">
+                        <span class="hidden-mobile">leetcode40：TOP k，快排算法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments">
+                
+                
+  <div id="vcomments"></div>
+  <script type="text/javascript">
+    Fluid.utils.waitElementVisible('vcomments', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function () {
+        new Valine({
+          el: "#vcomments",
+          app_id: "2Spf4SGTx3bcbcoSsUhUm8i7-gzGzoHsz",
+          app_key: "OM4RCMUGh8CvtgbXDrNgpHtv",
+          placeholder: "说点什么",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: false,
+          recordIP: false,
+          serverURLs: "",
+        });
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the
+    <a href="https://valine.js.org" target="_blank" rel="nofollow noopener noopener">comments powered by Valine.</a>
+  </noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      var inputArea = document.querySelector("#local-search-input");
+      inputArea.onclick = function () {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+        this.onclick = null
+      }
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?https://hm.baidu.com/hm.js?84185614db8dd775d7e0f0633cec31c0";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+
+</body>
+</html>

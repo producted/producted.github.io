@@ -1,0 +1,619 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="TalkZhang">
+  <meta name="keywords" content="">
+  <title>如何使用spring security - TalkZhang</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"uacoding.cn","root":"/","version":"1.8.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":true,"baidu":"https://hm.baidu.com/hm.js?84185614db8dd775d7e0f0633cec31c0","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"2Spf4SGTx3bcbcoSsUhUm8i7-gzGzoHsz","app_key":"OM4RCMUGh8CvtgbXDrNgpHtv","server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>TalkZhang</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/header_img/home-bg-2-dark.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="如何使用spring security">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-03-01 16:03" pubdate>
+        2020年3月1日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.2k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      27
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">如何使用spring security</h1>
+            
+            <div class="markdown-body">
+              <blockquote>
+<p>本文只介绍怎么用，不会介绍security是什么。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="拦截请求"><a href="#拦截请求" class="headerlink" title="拦截请求"></a>拦截请求</h2><p>对每个请求进行细粒度安全性控制的关键在于重载configure(HttpSecurity)方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(HttpSecurity http)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    http.authorizeRequests()                     </span><br><span class="line">            .antMatchers(<span class="string">"/test"</span>).authenticated()</span><br><span class="line">            <span class="comment">//.antMatchers("/test","/tests").authenticated()</span></span><br><span class="line">            .antMatchers(HttpMethod.POST,<span class="string">"/tests"</span>).authenticated()</span><br><span class="line">            .anyRequest().permitAll();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们首先调用<strong>authorizeRequests()</strong>，然后调用该方法所返回的对象的方法来配置请求级别的安全性细节。其中，第一次调用antMatchers()指定了对/test路径的请求需要认证。第二次调用antMatchers()更为具体，说明对/tests路径的HTTP POST请求必须要经过认证。最后anyRequest().permitAll()说明其他所有的请求都是允许的，不需要认证和任何的权限。 </p>
+<p>antMatchers()方法中设定的路径支持Ant风格的通配符。</p>
+<p>当然，antMatchers()同时也可以指定多个路径：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.antMatchers(<span class="string">"/test"</span>,<span class="string">"/tests"</span>).authenticated()</span><br></pre></td></tr></table></figure>
+
+<p>authenticated()要求在执行该请求时，必须已经登录了应用，否则会出现如下错误。permitAll()方法允许请求没有任何的安全限制。 </p>
+<p>用来定义如何保护路径的方法 ：</p>
+<p>我们还可以修改之前的configure()方法，要求用户不仅需要认证，还要具备ROLE_USER权限。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(HttpSecurity http)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        http.authorizeRequests()</span><br><span class="line">                <span class="comment">//.antMatchers("/test","/tests").authenticated()</span></span><br><span class="line">                .antMatchers(<span class="string">"/haha/**"</span>).hasAuthority(<span class="string">"ROLE_USER"</span>)</span><br><span class="line">                .antMatchers(<span class="string">"/haha/**"</span>).hasRole(<span class="string">"USER"</span>)</span><br><span class="line">                <span class="comment">//.antMatchers(HttpMethod.POST,"/tests").authenticated()</span></span><br><span class="line">                .anyRequest().permitAll();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>hasRole()是hasAuthority()的缩写，它会自动使用ROLE_前缀。</p>
+<p>我们可以将任意的antMatchers()、anyRequest()连接起来，以满足Web应用安全规则的需要。</p>
+<h2 id="使用Spring表达式进行保护"><a href="#使用Spring表达式进行保护" class="headerlink" title="使用Spring表达式进行保护"></a>使用Spring表达式进行保护</h2><p>表9.4.大多数方法都是一维的，也就是说不能叠加使用。但借助access()方法，我们也可以将SpEL作为声明访问限制的一种方式。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">.antMatchers(<span class="string">"/haha/**"</span>).hasRole(<span class="string">"USER"</span>)</span><br><span class="line">.antMatchers(<span class="string">"/haha/**"</span>).access(<span class="string">"hasRole('USER')"</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这两个效果是等价的。表9.5列出了Spring Security支持的所有SpEL表达式。 </p>
+<h2 id="强制通道的安全性"><a href="#强制通道的安全性" class="headerlink" title="强制通道的安全性"></a>强制通道的安全性</h2><p>我们都知道HTTP发送的数据都是不加密的，所以对于一些敏感信息要通过HTTPS来加密发送。<br>传递到config()方法中HttpSecurity对象，除了具有authorizeRequests()方法以外，还有一个requiresChannel()方法，借助这个方法能够为各种URL模式声明所要求的通道。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">    protected void configure(HttpSecurity http) throws Exception &#123;</span><br><span class="line">        http</span><br><span class="line">                .authorizeRequests()</span><br><span class="line">                .antMatchers(&quot;&#x2F;test&quot;,&quot;&#x2F;tests&quot;).authenticated()</span><br><span class="line">                .anyRequest().permitAll()</span><br><span class="line">                .and()</span><br><span class="line">                .requiresChannel()</span><br><span class="line">                .antMatchers(&quot;&#x2F;haha&#x2F;ha&quot;).requiresSecure()    &#x2F;&#x2F;需要HTTPS</span><br><span class="line">                ;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>与之相反，有些页面不需要通过HTTPS传送，我们可以使用requiresInsecure()代替requiresSecure()方法。</p>
+<p>防止跨站请求伪造(cross-site request forgery,CSRF)</p>
+<p>如果一个站点欺骗用户提交请求到其他服务器的话，就会发生CSRF攻击。 </p>
+<p>Spring Security3.2开启，默认会启用CSRF防护。因为我没怎么用到，所以细节就不多说了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.csrf().disable()   <span class="comment">//禁用CSRF防护</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="认证用户"><a href="#认证用户" class="headerlink" title="认证用户"></a>认证用户</h2><p>如果你使用最简单的Spring Security配置的话，那么就能无偿得到一个登陆页。实际上，在重写configure(HttpSecurity)之前，我们都能使用一个简单却功能完备的登陆页，但是一旦重写了configure(HttpSecurity)方法，就失去了这个简单的登录页面。 </p>
+<p>不过我们可以通过formLogin()方法把它找回来。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(HttpSecurity http)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        http</span><br><span class="line">               .formLogin()           </span><br><span class="line">               .and()                           </span><br><span class="line">               .csrf().disable()  <span class="comment">//禁用CSRF</span></span><br><span class="line">                .authorizeRequests()         </span><br><span class="line">                .antMatchers(<span class="string">"/test"</span>,<span class="string">"/tests"</span>).authenticated()</span><br><span class="line">                .anyRequest().permitAll()</span><br><span class="line">                ;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="添加自定义登录页面"><a href="#添加自定义登录页面" class="headerlink" title="添加自定义登录页面"></a>添加自定义登录页面</h2><p>上面可以看出，security给我们提供了默认的登录页面，当然，我们是可以自定义登录页面的，具体配置如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(HttpSecurity http)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        http</span><br><span class="line">               .formLogin()</span><br><span class="line">               .loginPage(<span class="string">"/login"</span>).defaultSuccessUrl(<span class="string">"/success"</span>).failureUrl(<span class="string">"/error"</span>)</span><br><span class="line">               .and()</span><br><span class="line">               .csrf().disable()</span><br><span class="line">                .authorizeRequests()            </span><br><span class="line">                .antMatchers(<span class="string">"/test"</span>,<span class="string">"/tests"</span>).authenticated()</span><br><span class="line">                .anyRequest().permitAll()</span><br><span class="line">                ;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/login"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">login</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;       </span><br><span class="line">        <span class="keyword">return</span> <span class="string">"login"</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>注意：自定义的登陆页也需要username和password输入域！否则会一直认证失败！！！！同时，loginPage（）与自定义登陆页的action访问路径是一样的！！！</p>
+<h2 id="Spring-Security使用Authentication获取当前用户信息"><a href="#Spring-Security使用Authentication获取当前用户信息" class="headerlink" title="Spring Security使用Authentication获取当前用户信息"></a>Spring Security使用Authentication获取当前用户信息</h2><p>Spring Security使用一个Authentication对象来描述当前用户的相关信息。SecurityContextHolder中持有的是当前用户的SecurityContext，而SecurityContext持有的是代表当前用户相关信息的Authentication的引用。这个Authentication对象不需要我们自己去创建，在与系统交互的过程中，Spring Security会自动为我们创建相应的Authentication对象，然后赋值给当前的SecurityContext。但是往往我们需要在程序中获取当前用户的相关信息，比如最常见的是获取当前登录用户的用户名。在程序的任何地方，通过如下方式我们可以获取到当前用户的用户名：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getCurrentUsername</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">      Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (principal <span class="keyword">instanceof</span> UserDetails) &#123;</span><br><span class="line"></span><br><span class="line">         <span class="keyword">return</span> ((UserDetails) principal).getUsername();</span><br><span class="line"></span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (principal <span class="keyword">instanceof</span> Principal) &#123;</span><br><span class="line"></span><br><span class="line">         <span class="keyword">return</span> ((Principal) principal).getName();</span><br><span class="line"></span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">return</span> String.valueOf(principal);</span><br><span class="line"></span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过Authentication.getPrincipal()可以获取到代表当前用户的信息，这个对象通常是UserDetails的实例。获取当前用户的用户名是一种比较常见的需求，关于上述代码其实Spring Security在Authentication中的实现类中已经为我们做了相关实现，所以获取当前用户的用户名最简单的方式应当如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getCurrentUsername</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">return</span> SecurityContextHolder.getContext().getAuthentication().getName();</span><br><span class="line"></span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="启用HTTP-Basic认证"><a href="#启用HTTP-Basic认证" class="headerlink" title="启用HTTP Basic认证"></a>启用HTTP Basic认证</h2><p>当在Web浏览器中使用时，它将向用户弹出一个简单的模拟对话框。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">http</span><br><span class="line">.httpBasic()</span><br><span class="line">.and()</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<h2 id="退出"><a href="#退出" class="headerlink" title="退出"></a>退出</h2><p>退出功能是通过Servlet容器中的Filter实现的(默认情况下)，这个Filter会拦截针对”/logout”的请求。因此，为应用添加退出功能只需要添加以下的链接即可。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;a href="$&#123;pageContext.request.contextPath &#125;/logout"&gt;退出&lt;/a&gt;</span><br></pre></td></tr></table></figure>
+
+<p>在退出完成后，浏览器会重定向到“login?logout”，从而允许用户进行再次登录。如果你希望重定向到其他页面可以</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.logout().logoutSuccessUrl(<span class="string">"/error"</span>)</span><br></pre></td></tr></table></figure>
+
+<p>logoutSuccessUrl(“/error”)表明在退出成功后，浏览器需要重定向到”/error”。我们还可以重写默认的LogoutFilter拦截路径。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.logout().logoutSuccessUrl(<span class="string">"/error"</span>).logoutUrl(<span class="string">"/tuichu"</span>)</span><br></pre></td></tr></table></figure>
+
+<p>前面说到LogoutFilter默认会拦截针对”/logout”的请求，在这里我们通过logoutUrl(“/tuichu”)设置为拦截”/tuichu”的请求。同时将退出的请求路径更改为如下所示</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;a href="$&#123;pageContext.request.contextPath &#125;/tuichu"&gt;退出&lt;/a&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="保护视图"><a href="#保护视图" class="headerlink" title="保护视图"></a>保护视图</h2><p>当为浏览器渲染html内容时，你可能希望视图中能够反映安全限制和相关的信息。或者你想根据用户被授予了什么权限，有条件的渲染特定的视图内容。渲染视图的两个重要方案就是：JSP和Thymeleaf。 </p>
+<p>Spring Security本身提供了一个JSP标签库，而Thymeleaf通过特定的方言实现了与Spring Security的集成</p>
+<p>Spring Security的JSP标签库</p>
+<p>Spring Security的JSP标签库很小，就三个标签。 </p>
+<p>为了使用JSP标签库，我们需要在JSP文件中声明它：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">%@</span> <span class="attr">taglib</span> <span class="attr">prefix</span>=<span class="string">"security"</span> <span class="attr">uri</span>=<span class="string">"http://www.springframework.org/security/tags"</span> %&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="访问认证信息的页面控制"><a href="#访问认证信息的页面控制" class="headerlink" title="访问认证信息的页面控制"></a>访问认证信息的页面控制</h2><p>借助Spring Security的JSP标签库，所做的最简单的一件事就是便利的访问用户的认证信息。这恰恰是 &lt; security:authentication &gt;能为我们做的事情。例如：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hello<span class="tag">&lt;<span class="name">security:authentication</span> <span class="attr">property</span>=<span class="string">"principal.username"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>property用来标示用户认证对象的一个属性。可用的属性取决于用户认证的方式。 </p>
+<p>我们也可以将渲染属性的值赋给一个变量，那只需要在var属性中指明变量的名字即可。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">security:authentication</span> <span class="attr">property</span>=<span class="string">"principal.username"</span> <span class="attr">var</span>=<span class="string">"name"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这个变量默认是定义在页面作用域内的，我们可以通过scope属性来更改变量作用域。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">security:authentication</span> <span class="attr">property</span>=<span class="string">"principal.username"</span> <span class="attr">var</span>=<span class="string">"name"</span>  <span class="attr">scope</span>=<span class="string">"request"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="判断用户登录"><a href="#判断用户登录" class="headerlink" title="判断用户登录"></a>判断用户登录</h3><p>isAnonymous() 为 true则表示未登录，isAuthenticated()为true则表示已登录！</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">!–匿名–</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">security:authorize</span> <span class="attr">access</span>=<span class="string">"isAnonymous()"</span>&gt;</span></span><br><span class="line">    未登录，点击 <span class="tag">&lt;<span class="name">a</span>&gt;</span>登录<span class="tag">&lt;/<span class="name">a</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">security:authorize</span>&gt;</span>　</span><br><span class="line"><span class="tag">&lt;<span class="name">!–登录–</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">security:authorize</span> <span class="attr">access</span>=<span class="string">"isAuthenticated()"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h3</span>&gt;</span>登录成功！<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">security:authorize</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="条件性的渲染内容"><a href="#条件性的渲染内容" class="headerlink" title="条件性的渲染内容"></a>条件性的渲染内容</h3><p>有时候视图上的一部分内容需要根据用户被授予了什么权限来确定是否渲染。Spring Security的&lt; security:authorize &gt;JSP标签能够根据用户被授予的权限有条件的渲染页面的部分内容。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hello<span class="tag">&lt;<span class="name">security:authentication</span> <span class="attr">property</span>=<span class="string">"principal.username"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">security:authorize</span> <span class="attr">access</span>=<span class="string">"hasRole('user')"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>有条件性的渲染的内容<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">security:authorize</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>access属性被赋值给一个SpEL表达式，这个表达式的值确定&lt; security:authorize &gt;标签内主体内的内容是否渲染。</p>
+<p>剩余问题，thymeleaf的整合使用。</p>
+<hr>
+<p>近期整合了thymeleaf，使用oauth2结合security实现了带点登录，github地址：</p>
+<p><a href="https://github.com/producted/spring-learning/tree/master/zpk-oauth2-sso-demo" target="_blank" rel="noopener">https://github.com/producted/spring-learning/tree/master/zpk-oauth2-sso-demo</a></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/security/">security</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/java/">java</a>
+                    
+                      <a class="hover-with-bg" href="/tags/security/">security</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" target="_blank" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/03/01/2019-06-26-oauth2/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">oauth2入门及介绍</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/03/01/2019-06-20-%E9%9A%8F%E7%AC%94/">
+                        <span class="hidden-mobile">关于spring cloud注册中心nacos</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments">
+                
+                
+  <div id="vcomments"></div>
+  <script type="text/javascript">
+    Fluid.utils.waitElementVisible('vcomments', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function () {
+        new Valine({
+          el: "#vcomments",
+          app_id: "2Spf4SGTx3bcbcoSsUhUm8i7-gzGzoHsz",
+          app_key: "OM4RCMUGh8CvtgbXDrNgpHtv",
+          placeholder: "说点什么",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: false,
+          recordIP: false,
+          serverURLs: "",
+        });
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the
+    <a href="https://valine.js.org" target="_blank" rel="nofollow noopener noopener">comments powered by Valine.</a>
+  </noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      var inputArea = document.querySelector("#local-search-input");
+      inputArea.onclick = function () {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+        this.onclick = null
+      }
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?https://hm.baidu.com/hm.js?84185614db8dd775d7e0f0633cec31c0";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+
+</body>
+</html>
