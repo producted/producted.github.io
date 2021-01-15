@@ -231,20 +231,20 @@
 <a id="more"></a>
 <p>你可以假设数组是非空的，并且给定的数组总是存在多数元素。</p>
 <p>示例 1:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: [<span class="number">3</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">输出: <span class="number">3</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java">输入: [<span class="hljs-number">3</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>]<br>输出: <span class="hljs-number">3</span><br></code></pre></td></tr></table></figure>
 
 <p>示例 2:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: [<span class="number">2</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>]</span><br><span class="line">输出: <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java">输入: [<span class="hljs-number">2</span>,<span class="hljs-number">2</span>,<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">2</span>]<br>输出: <span class="hljs-number">2</span><br></code></pre></td></tr></table></figure>
 
 <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><h3 id="暴力"><a href="#暴力" class="headerlink" title="暴力"></a>暴力</h3><p>这直接分组得到数组内每个数值对应的count数值，过滤得出。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">majorityElement</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> count = nums.length / <span class="number">2</span>;</span><br><span class="line">        List&lt;Integer&gt; list = Arrays.stream(nums).boxed().collect(Collectors.toList());</span><br><span class="line">        Map&lt;Integer, List&lt;Integer&gt;&gt; collect = list.stream().collect(Collectors.groupingBy(Integer::intValue));</span><br><span class="line">        List&lt;Integer&gt; retList = collect.keySet().stream().filter(key -&gt; collect.get(key).size() &gt; count).collect(Collectors.toList());</span><br><span class="line">        <span class="keyword">return</span> retList == <span class="keyword">null</span> || retList.isEmpty() ? <span class="number">0</span> : retList.get(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">majorityElement</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] nums)</span> </span>&#123;<br>        <span class="hljs-keyword">int</span> count = nums.length / <span class="hljs-number">2</span>;<br>        List&lt;Integer&gt; list = Arrays.stream(nums).boxed().collect(Collectors.toList());<br>        Map&lt;Integer, List&lt;Integer&gt;&gt; collect = list.stream().collect(Collectors.groupingBy(Integer::intValue));<br>        List&lt;Integer&gt; retList = collect.keySet().stream().filter(key -&gt; collect.get(key).size() &gt; count).collect(Collectors.toList());<br>        <span class="hljs-keyword">return</span> retList == <span class="hljs-keyword">null</span> || retList.isEmpty() ? <span class="hljs-number">0</span> : retList.get(<span class="hljs-number">0</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p>遗憾的是，效率忒低了，当我吧这条记录提交后，显示：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">执行用时 :32 ms, 在所有 Java 提交中击败了9.90%的用户</span><br><span class="line"></span><br><span class="line">内存消耗 :44.2 MB, 在所有 Java 提交中击败了5.07%的用户</span><br></pre></td></tr></table></figure>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs angelscript">执行用时 :<span class="hljs-number">32</span> ms, 在所有 Java 提交中击败了<span class="hljs-number">9.90</span>%的用户<br><br>内存消耗 :<span class="hljs-number">44.2</span> MB, 在所有 Java 提交中击败了<span class="hljs-number">5.07</span>%的用户<br></code></pre></td></tr></table></figure>
 
 <p>难受啊，一下子感觉自尊心受到了一点点侮辱，两个百分比都没过两位数，当然通过题库官方解读，还是可以写出来剩下的几种方法和理解。</p>
 <h3 id="排序算法实现"><a href="#排序算法实现" class="headerlink" title="排序算法实现"></a>排序算法实现</h3><p>如果将数组 nums 中的所有元素按照单调递增或单调递减的顺序排序，那么下标为⌊<code>\frac{n}{2}</code> ⌋ 的元素（下标从 0 开始）一定是众数。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">majorityElement1</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">    Arrays.sort(nums);</span><br><span class="line">    <span class="keyword">return</span> nums[nums.length / <span class="number">2</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> <span class="hljs-title">majorityElement1</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] nums)</span> </span>&#123;<br>    Arrays.sort(nums);<br>    <span class="hljs-keyword">return</span> nums[nums.length / <span class="hljs-number">2</span>];<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p><strong>复杂度分析</strong></p>
 <ul>
@@ -253,7 +253,7 @@
 <li><h3 id="hash实现"><a href="#hash实现" class="headerlink" title="hash实现"></a>hash实现</h3></li>
 </ul>
 <p>出现次数最多的元素大于 ⌊<code>$\frac{n}{2}$</code>⌋ 次，所以可以用哈希表来快速统计每个元素出现的次数。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">majorityElement3</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">    Map&lt;Integer, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> num : nums) &#123;</span><br><span class="line">        Integer count = map.get(num);</span><br><span class="line">        map.put(num, count == <span class="keyword">null</span> ? <span class="number">1</span> : ++count);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Map.Entry&lt;Integer, Integer&gt; majEntry = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">for</span> (Map.Entry&lt;Integer, Integer&gt; entry : map.entrySet()) &#123;</span><br><span class="line">        <span class="keyword">if</span> (majEntry == <span class="keyword">null</span> || entry.getValue() &gt; majEntry.getValue()) &#123;</span><br><span class="line">            majEntry = entry;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> majEntry.getKey();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> <span class="hljs-title">majorityElement3</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] nums)</span> </span>&#123;<br>    Map&lt;Integer, Integer&gt; map = <span class="hljs-keyword">new</span> HashMap&lt;&gt;();<br>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> num : nums) &#123;<br>        Integer count = map.get(num);<br>        map.put(num, count == <span class="hljs-keyword">null</span> ? <span class="hljs-number">1</span> : ++count);<br>    &#125;<br><br>    Map.Entry&lt;Integer, Integer&gt; majEntry = <span class="hljs-keyword">null</span>;<br>    <span class="hljs-keyword">for</span> (Map.Entry&lt;Integer, Integer&gt; entry : map.entrySet()) &#123;<br>        <span class="hljs-keyword">if</span> (majEntry == <span class="hljs-keyword">null</span> || entry.getValue() &gt; majEntry.getValue()) &#123;<br>            majEntry = entry;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> majEntry.getKey();<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p>复杂度分析</p>
 <ul>
@@ -262,7 +262,7 @@
 </ul>
 <h3 id="投票算法"><a href="#投票算法" class="headerlink" title="投票算法"></a>投票算法</h3><p>如果把众数记为 +1，把其他数记为−1，将它们全部加起来，显然和大于0，从结果本身可以看出众数比其他数多。</p>
 <p>可能不太好理解，<a href="https://leetcode-cn.com/problems/majority-element/solution/duo-shu-yuan-su-by-leetcode-solution/" target="_blank" rel="noopener">点击此处带你飞</a></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">majorityElement2</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> maj = nums[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (count == <span class="number">0</span>) &#123;</span><br><span class="line">            maj = nums[i];</span><br><span class="line">        &#125;</span><br><span class="line">        count += (maj == nums[i]) ? <span class="number">1</span> : -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> maj;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> <span class="hljs-title">majorityElement2</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] nums)</span> </span>&#123;<br>    <span class="hljs-keyword">int</span> maj = nums[<span class="hljs-number">0</span>];<br>    <span class="hljs-keyword">int</span> count = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; nums.length; i++) &#123;<br>        <span class="hljs-keyword">if</span> (count == <span class="hljs-number">0</span>) &#123;<br>            maj = nums[i];<br>        &#125;<br>        count += (maj == nums[i]) ? <span class="hljs-number">1</span> : -<span class="hljs-number">1</span>;<br>    &#125;<br>    <span class="hljs-keyword">return</span> maj;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p><strong>复杂度分析</strong></p>
 <ul>
@@ -325,30 +325,30 @@
               <article class="comments" id="comments">
                 
                 
-  <div id="vcomments"></div>
+  <div id="gitalk-container"></div>
   <script type="text/javascript">
-    Fluid.utils.waitElementVisible('vcomments', function() {
-      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function () {
-        new Valine({
-          el: "#vcomments",
-          app_id: "2Spf4SGTx3bcbcoSsUhUm8i7-gzGzoHsz",
-          app_key: "OM4RCMUGh8CvtgbXDrNgpHtv",
-          placeholder: "说点什么",
-          path: window.location.pathname,
-          avatar: "retro",
-          meta: ["nick","mail","link"],
-          pageSize: "10",
-          lang: "zh-CN",
-          highlight: false,
-          recordIP: false,
-          serverURLs: "",
+    Fluid.utils.waitElementVisible('gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/gitalk@1.7.0/dist/gitalk.min.js', function () {
+        var gitalk = new Gitalk({
+          clientID: '077189dd46642a530051',
+          clientSecret: '39f15a5548fa5d941dc5239910874e6870eee52e',
+          repo: 'https://github.com/producted/gittalkcomment',
+          owner: 'producted',
+          admin: ["producted"],
+          id: '63c13c9670228a5d98b18e1a45a010b9',
+          language: 'zh-CN',
+          labels: ["Gitalk"],
+          perPage: 10,
+          pagerDirection: 'last',
+          createIssueManually: true,
+          distractionFreeMode: false
         });
+        gitalk.render('gitalk-container');
       });
     });
   </script>
-  <noscript>Please enable JavaScript to view the
-    <a href="https://valine.js.org" target="_blank" rel="nofollow noopener noopener">comments powered by Valine.</a>
-  </noscript>
+  <noscript>Please enable JavaScript to view the comments</noscript>
 
 
               </article>

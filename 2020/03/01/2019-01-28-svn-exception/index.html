@@ -184,7 +184,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      425 字
+      413 字
     </span>
   
 
@@ -230,7 +230,7 @@
               <h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>使用 TortoiseSVN 从 GitHub 仓库 Update 时，弹出错误提示对话框：</p>
 <a id="more"></a>
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">---------------------------</span><br><span class="line">Subversion Exception!</span><br><span class="line">---------------------------</span><br><span class="line">Subversion encountered a serious problem.</span><br><span class="line">Please take the time to report this on the Subversion mailing list</span><br><span class="line">with as much information as possible about what</span><br><span class="line">you were trying to do.</span><br><span class="line">But please first search the mailing list archives for the error message</span><br><span class="line">to avoid reporting the same problem repeatedly.</span><br><span class="line">You can find the mailing list archives at</span><br><span class="line">http:&#x2F;&#x2F;subversion.apache.org&#x2F;mailing-lists.html</span><br><span class="line"></span><br><span class="line">Subversion reported the following</span><br><span class="line">(you can copy the content of this dialog</span><br><span class="line">to the clipboard using Ctrl-C):</span><br><span class="line"></span><br><span class="line">In file</span><br><span class="line"> &#39;D:\Development\SVN\Releases\TortoiseSVN-1.8.11\ext\subversion\subversion\libsvn_wc\update_editor.c&#39;</span><br><span class="line"> line 1550: assertion failed (action &#x3D;&#x3D; svn_wc_conflict_action_delete)</span><br><span class="line">---------------------------</span><br><span class="line">确定   </span><br><span class="line">---------------------------</span><br></pre></td></tr></table></figure>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver"><span class="hljs-comment">---------------------------</span><br>Subversion Exception!<br><span class="hljs-comment">---------------------------</span><br>Subversion encountered <span class="hljs-keyword">a</span> serious problem.<br>Please take <span class="hljs-keyword">the</span> <span class="hljs-built_in">time</span> <span class="hljs-built_in">to</span> report this <span class="hljs-keyword">on</span> <span class="hljs-title">the</span> <span class="hljs-title">Subversion</span> <span class="hljs-title">mailing</span> <span class="hljs-title">list</span><br><span class="hljs-keyword">with</span> <span class="hljs-keyword">as</span> much information <span class="hljs-keyword">as</span> possible about what<br>you were trying <span class="hljs-built_in">to</span> <span class="hljs-built_in">do</span>.<br>But please <span class="hljs-keyword">first</span> search <span class="hljs-keyword">the</span> mailing list archives <span class="hljs-keyword">for</span> <span class="hljs-keyword">the</span> error message<br><span class="hljs-built_in">to</span> avoid reporting <span class="hljs-keyword">the</span> same problem repeatedly.<br>You can find <span class="hljs-keyword">the</span> mailing list archives <span class="hljs-keyword">at</span><br><span class="hljs-keyword">http</span>://subversion.apache.org/mailing-lists.html<br><br>Subversion reported <span class="hljs-keyword">the</span> following<br>(you can copy <span class="hljs-keyword">the</span> content <span class="hljs-keyword">of</span> this dialog<br><span class="hljs-built_in">to</span> <span class="hljs-keyword">the</span> clipboard <span class="hljs-keyword">using</span> Ctrl-C):<br><br>In <span class="hljs-built_in">file</span><br> <span class="hljs-string">'D:\Development\SVN\Releases\TortoiseSVN-1.8.11\ext\subversion\subversion\libsvn_wc\update_editor.c'</span><br> <span class="hljs-built_in">line</span> <span class="hljs-number">1550</span>: assertion failed (action == svn_wc_conflict_action_delete)<br><span class="hljs-comment">---------------------------</span><br>确定   <br><span class="hljs-comment">---------------------------</span><br></code></pre></td></tr></table></figure>
 
 <p>推测发生原因可能是 GitHub 认为本地的目录结构与服务器冲突，因为能看到本地之前 Checkout 出来的一个文件夹显示未纳入版本控制，但是实际上服务器上这个文件夹一直存在在。</p>
 <p>查到在一个 <a href="http://mail-archives.apache.org/mod_mbox/subversion-users/201503.mbox/%3C076701d05e91$234ef3b0$69ecdb10$@qqmail.nl%3E" target="_blank" rel="noopener">邮件列表</a> 里说这是由 GitHub 的实现有点问题导致，但是，也如其它地方能查到的信息一样，并没有给出解决方案。</p>
@@ -248,12 +248,12 @@
 </ol>
 <p>无奈之下试了一下命令行，找到了解决办法。</p>
 <h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>其实很简单，就是使用命令行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">svn cleanup</span><br><span class="line">svn update</span><br></pre></td></tr></table></figure>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs properties"><span class="hljs-attr">svn</span> <span class="hljs-string">cleanup</span><br><span class="hljs-attr">svn</span> <span class="hljs-string">update</span><br></code></pre></td></tr></table></figure>
 
 <p>就可以了，再使用 GUI 的 Update 就不会报错了。</p>
 <p>为啥就好了仍然原因不明。</p>
 <h3 id="最新情况"><a href="#最新情况" class="headerlink" title="最新情况"></a>最新情况</h3><p>后来又出现了一次这样的情况，在命令行 <code>svn update</code> 也不好使了，提示</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">svn: E155010: The node &#39;a&#x2F;folder&#x2F;path&#x2F;&#39; was not found.</span><br></pre></td></tr></table></figure>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">svn: E155010: The <span class="hljs-keyword">node</span> <span class="hljs-title">'a</span>/folder/path/' was not found.<br></code></pre></td></tr></table></figure>
 
 <p>忍无可忍，切回使用 git。</p>
 
@@ -312,30 +312,30 @@
               <article class="comments" id="comments">
                 
                 
-  <div id="vcomments"></div>
+  <div id="gitalk-container"></div>
   <script type="text/javascript">
-    Fluid.utils.waitElementVisible('vcomments', function() {
-      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function () {
-        new Valine({
-          el: "#vcomments",
-          app_id: "2Spf4SGTx3bcbcoSsUhUm8i7-gzGzoHsz",
-          app_key: "OM4RCMUGh8CvtgbXDrNgpHtv",
-          placeholder: "说点什么",
-          path: window.location.pathname,
-          avatar: "retro",
-          meta: ["nick","mail","link"],
-          pageSize: "10",
-          lang: "zh-CN",
-          highlight: false,
-          recordIP: false,
-          serverURLs: "",
+    Fluid.utils.waitElementVisible('gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/gitalk@1.7.0/dist/gitalk.min.js', function () {
+        var gitalk = new Gitalk({
+          clientID: '077189dd46642a530051',
+          clientSecret: '39f15a5548fa5d941dc5239910874e6870eee52e',
+          repo: 'https://github.com/producted/gittalkcomment',
+          owner: 'producted',
+          admin: ["producted"],
+          id: 'fc45aad8f7fd607b0bcada440f870c92',
+          language: 'zh-CN',
+          labels: ["Gitalk"],
+          perPage: 10,
+          pagerDirection: 'last',
+          createIssueManually: true,
+          distractionFreeMode: false
         });
+        gitalk.render('gitalk-container');
       });
     });
   </script>
-  <noscript>Please enable JavaScript to view the
-    <a href="https://valine.js.org" target="_blank" rel="nofollow noopener noopener">comments powered by Valine.</a>
-  </noscript>
+  <noscript>Please enable JavaScript to view the comments</noscript>
 
 
               </article>

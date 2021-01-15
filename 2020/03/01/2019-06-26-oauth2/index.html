@@ -251,7 +251,7 @@
 <p>（E）认证服务器核对了授权码和重定向URI，确认无误后，向客户端发送访问令牌（access token）和更新令牌（refresh token）。</p>
 <p>下面是上面这些步骤所需要的参数。<br>A步骤中，客户端申请认证的URI，包含以下参数：<br>response_type：表示授权类型，必选项，此处的值固定为”code”<br>client_id：表示客户端的ID，必选项<br>redirect_uri：表示重定向URI，可选项<br>scope：表示申请的权限范围，可选项<br>state：表示客户端的当前状态，可以指定任意值，认证服务器会原封不动地返回这个值。</p>
 <p>代码示例-授权服务端配置：这里只显示核心配置客户端的一些东西：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(ClientDetailsServiceConfigurer clients)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    clients.inMemory()</span><br><span class="line">            .withClient(<span class="string">"client1"</span>)</span><br><span class="line">            .redirectUris(<span class="string">"http://www.baidu.com"</span>) <span class="comment">// 注册一个重定向地址</span></span><br><span class="line">            .secret(<span class="keyword">new</span> BCryptPasswordEncoder().encode(<span class="string">"client1"</span>))</span><br><span class="line">            .authorizedGrantTypes(<span class="string">"authorization_code"</span>, <span class="string">"refresh_token"</span>)</span><br><span class="line">            .scopes(<span class="string">"all"</span>)</span><br><span class="line">            .and()</span><br><span class="line">            .withClient(<span class="string">"client2"</span>)</span><br><span class="line">            .secret(<span class="keyword">new</span> BCryptPasswordEncoder().encode(<span class="string">"client2"</span>))</span><br><span class="line">            .authorizedGrantTypes(<span class="string">"authorization_code"</span>, <span class="string">"refresh_token"</span>)</span><br><span class="line">            .scopes(<span class="string">"all"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Override</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">configure</span><span class="hljs-params">(ClientDetailsServiceConfigurer clients)</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;<br>    clients.inMemory()<br>            .withClient(<span class="hljs-string">"client1"</span>)<br>            .redirectUris(<span class="hljs-string">"http://www.baidu.com"</span>) <span class="hljs-comment">// 注册一个重定向地址</span><br>            .secret(<span class="hljs-keyword">new</span> BCryptPasswordEncoder().encode(<span class="hljs-string">"client1"</span>))<br>            .authorizedGrantTypes(<span class="hljs-string">"authorization_code"</span>, <span class="hljs-string">"refresh_token"</span>)<br>            .scopes(<span class="hljs-string">"all"</span>)<br>            .and()<br>            .withClient(<span class="hljs-string">"client2"</span>)<br>            .secret(<span class="hljs-keyword">new</span> BCryptPasswordEncoder().encode(<span class="hljs-string">"client2"</span>))<br>            .authorizedGrantTypes(<span class="hljs-string">"authorization_code"</span>, <span class="hljs-string">"refresh_token"</span>)<br>            .scopes(<span class="hljs-string">"all"</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p>请求方式：</p>
 <p>通过这个链接<a href="http://localhost:8082/uaa/oauth/authorize?response_type=code&amp;client_id=client1&amp;redirect_uri=http://www.baidu.com&amp;scope=all获取code，拿到code之后：发起如下请求：" target="_blank" rel="noopener">http://localhost:8082/uaa/oauth/authorize?response_type=code&amp;client_id=client1&amp;redirect_uri=http://www.baidu.com&amp;scope=all获取code，拿到code之后：发起如下请求：</a></p>
@@ -340,30 +340,30 @@
               <article class="comments" id="comments">
                 
                 
-  <div id="vcomments"></div>
+  <div id="gitalk-container"></div>
   <script type="text/javascript">
-    Fluid.utils.waitElementVisible('vcomments', function() {
-      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function () {
-        new Valine({
-          el: "#vcomments",
-          app_id: "2Spf4SGTx3bcbcoSsUhUm8i7-gzGzoHsz",
-          app_key: "OM4RCMUGh8CvtgbXDrNgpHtv",
-          placeholder: "说点什么",
-          path: window.location.pathname,
-          avatar: "retro",
-          meta: ["nick","mail","link"],
-          pageSize: "10",
-          lang: "zh-CN",
-          highlight: false,
-          recordIP: false,
-          serverURLs: "",
+    Fluid.utils.waitElementVisible('gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/gitalk@1.7.0/dist/gitalk.min.js', function () {
+        var gitalk = new Gitalk({
+          clientID: '077189dd46642a530051',
+          clientSecret: '39f15a5548fa5d941dc5239910874e6870eee52e',
+          repo: 'https://github.com/producted/gittalkcomment',
+          owner: 'producted',
+          admin: ["producted"],
+          id: '68db60e96fcd2e9f4a79b574f001209f',
+          language: 'zh-CN',
+          labels: ["Gitalk"],
+          perPage: 10,
+          pagerDirection: 'last',
+          createIssueManually: true,
+          distractionFreeMode: false
         });
+        gitalk.render('gitalk-container');
       });
     });
   </script>
-  <noscript>Please enable JavaScript to view the
-    <a href="https://valine.js.org" target="_blank" rel="nofollow noopener noopener">comments powered by Valine.</a>
-  </noscript>
+  <noscript>Please enable JavaScript to view the comments</noscript>
 
 
               </article>

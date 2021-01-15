@@ -443,30 +443,30 @@
               <article class="comments" id="comments">
                 
                 
-  <div id="vcomments"></div>
+  <div id="gitalk-container"></div>
   <script type="text/javascript">
-    Fluid.utils.waitElementVisible('vcomments', function() {
-      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function () {
-        new Valine({
-          el: "#vcomments",
-          app_id: "2Spf4SGTx3bcbcoSsUhUm8i7-gzGzoHsz",
-          app_key: "OM4RCMUGh8CvtgbXDrNgpHtv",
-          placeholder: "说点什么",
-          path: window.location.pathname,
-          avatar: "retro",
-          meta: ["nick","mail","link"],
-          pageSize: "10",
-          lang: "zh-CN",
-          highlight: false,
-          recordIP: false,
-          serverURLs: "",
+    Fluid.utils.waitElementVisible('gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/gitalk@1.7.0/dist/gitalk.min.js', function () {
+        var gitalk = new Gitalk({
+          clientID: '077189dd46642a530051',
+          clientSecret: '39f15a5548fa5d941dc5239910874e6870eee52e',
+          repo: 'https://github.com/producted/gittalkcomment',
+          owner: 'producted',
+          admin: ["producted"],
+          id: '68a2fe73f6dcad51b84a91ba95a144b3',
+          language: 'zh-CN',
+          labels: ["Gitalk"],
+          perPage: 10,
+          pagerDirection: 'last',
+          createIssueManually: true,
+          distractionFreeMode: false
         });
+        gitalk.render('gitalk-container');
       });
     });
   </script>
-  <noscript>Please enable JavaScript to view the
-    <a href="https://valine.js.org" target="_blank" rel="nofollow noopener noopener">comments powered by Valine.</a>
-  </noscript>
+  <noscript>Please enable JavaScript to view the comments</noscript>
 
 
               </article>
